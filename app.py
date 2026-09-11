@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-DEVICE_TOKEN = "CHANGE_THIS_TOKEN"
+DEVICE_TOKEN = "R7kP92xLm4Qv81ZaT6nYG5JH"
 
 @app.route("/")
 def home():
