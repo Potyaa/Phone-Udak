@@ -1,28 +1,41 @@
 from flask import Flask, jsonify, request
+import os
 
 app = Flask(__name__)
 
-DEVICE_TOKEN = "R7kP92xLm4Qv81ZaT6nYG5JH"
+DEVICE_TOKEN = os.environ.get("DEVICE_TOKEN", "P7xK92mQ4zL8vN3j4K")
+
+device = {
+    "connected": False,
+    "name": None
+}
 
 @app.route("/")
 def home():
     return """
     <h1>📱 Remote Control</h1>
     <p>Server is online.</p>
-    <p>Device connection: waiting</p>
-    """
+    <p>Device connection: %s</p>
+    """ % ("🟢 connected" if device["connected"] else "🔴 waiting")
+
+@app.route("/api/connect", methods=["POST"])
+def connect():
+    data = request.get_json(silent=True) or {}
+
+    if data.get("token") != DEVICE_TOKEN:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    device["connected"] = True
+    device["name"] = data.get("name", "Android")
+
+    return jsonify({
+        "ok": True,
+        "message": "Device connected"
+    })
 
 @app.route("/api/status")
 def status():
-    token = request.headers.get("Authorization")
-
-    if token != DEVICE_TOKEN:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    return jsonify({
-        "online": True,
-        "device": "Android"
-    })
+    return jsonify(device)
 
 @app.route("/health")
 def health():
