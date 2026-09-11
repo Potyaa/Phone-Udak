@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-DEVICE_TOKEN = os.environ.get("DEVICE_TOKEN", "P7xK92mQ4zL8vN3j4K")
+DEVICE_TOKEN = os.environ.get("DEVICE_TOKEN", "CHANGE_ME")
 
 device = {
     "connected": False,
